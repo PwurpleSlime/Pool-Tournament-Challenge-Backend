@@ -16,6 +16,12 @@ export class AuthService {
     constructor() {
         this.authAccounts = []
     }
+    async onModuleInit() {
+        this.authAccounts.push({
+            username: 'username',
+            password: await bcrypt.hash('password', 10)
+        })
+    }
     async addAccount(username: string, password: string) {
         this.authAccounts.push({username: username, password: await hashString(password)})
         return "Success"
@@ -25,13 +31,11 @@ export class AuthService {
         return this.authAccounts
     }
     async checkPassword(username: string, password: string){
-        const hashPassword = await hashString(password)
         for (let i = 0; i < this.authAccounts.length; i++) {
-            if (username == this.authAccounts[i].username && hashPassword == this.authAccounts[i].password){
-                return true
-            }else {
-                return false
+            if (username == this.authAccounts[i].username){
+                return bcrypt.compare(password, this.authAccounts[i].password);
             }
         }
+        return false
     }
 }

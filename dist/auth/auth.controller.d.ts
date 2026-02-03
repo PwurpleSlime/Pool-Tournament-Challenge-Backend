@@ -6,4 +6,6 @@ export declare class AuthController {
         username: string;
         password: string;
     }[];
+    addAccount(username: string, password: string): Promise<string>;
+    checkPassword(username: string, password: string): Promise<any>;
 }

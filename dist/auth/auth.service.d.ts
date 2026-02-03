@@ -6,8 +6,9 @@ declare class Account {
 export declare class AuthService {
     authAccounts: Account[];
     constructor();
+    onModuleInit(): Promise<void>;
     addAccount(username: string, password: string): Promise<string>;
     getAccounts(): Account[];
-    checkPassword(username: string, password: string): Promise<boolean | undefined>;
+    checkPassword(username: string, password: string): Promise<any>;
 }
 export {};
