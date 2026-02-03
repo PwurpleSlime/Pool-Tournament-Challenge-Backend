@@ -15,6 +15,7 @@ const tournament_module_1 = require("./tournament/tournament.module");
 const matches_module_1 = require("./matches/matches.module");
 const socket_module_1 = require("./socket/socket.module");
 const config_1 = require("@nestjs/config");
+const auth_module_1 = require("./auth/auth.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -24,7 +25,7 @@ exports.AppModule = AppModule = __decorate([
                 isGlobal: true,
                 envFilePath: '.env'
             }),
-            players_module_1.PlayersModule, tournament_module_1.TournamentModule, matches_module_1.MatchesModule, socket_module_1.SocketModule],
+            players_module_1.PlayersModule, tournament_module_1.TournamentModule, matches_module_1.MatchesModule, socket_module_1.SocketModule, auth_module_1.AuthModule],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
     })
