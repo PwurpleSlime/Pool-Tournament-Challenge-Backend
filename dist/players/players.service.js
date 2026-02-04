@@ -29,8 +29,8 @@ let PlayersService = class PlayersService {
             id: (0, uuid_1.v4)(),
             disName: inputData.displayName,
             tournamentId: inputData.tournamentId,
-            wins: inputData.wins || 0,
-            losses: inputData.losses || 0,
+            wins: inputData.wins,
+            losses: inputData.losses,
             "w-l": (inputData.wins + inputData.losses) === 0 ? '0%' : `${Math.round((inputData.wins / (inputData.wins + inputData.losses)) * 100)}%`,
             logo: "https://example.com/logo.png"
         })
