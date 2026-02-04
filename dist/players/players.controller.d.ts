@@ -5,6 +5,7 @@ export declare class PlayersController {
     create(body: any): Promise<any>;
     findAll(): Promise<any[]>;
     findOne(id: string): Promise<any>;
+    deletePlayer(id: string): Promise<void>;
     findTournamentPlayers(id: string): Promise<any[]>;
     updateRecord(id: string, body: {
         wins: number;

@@ -90,4 +90,10 @@ export class PlayersService {
 
 
   // Add update/delete routes -- @SPARE_TIME
+  async deletePlayer(id: string) {
+    const { data, error } = await this.supabase
+    .from('Player')
+    .delete()
+    .eq('id', id)
+  }
 }

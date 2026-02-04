@@ -84,6 +84,12 @@ let PlayersService = class PlayersService {
         }
         return data;
     }
+    async deletePlayer(id) {
+        const { data, error } = await this.supabase
+            .from('Player')
+            .delete()
+            .eq('id', id);
+    }
 };
 exports.PlayersService = PlayersService;
 exports.PlayersService = PlayersService = __decorate([

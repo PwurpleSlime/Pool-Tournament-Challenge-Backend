@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Patch, Param, Body } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Param, Body, Delete } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBody } from '@nestjs/swagger';
 import { PlayersService } from './players.service';
 
@@ -37,7 +37,11 @@ export class PlayersController {
   findOne(@Param('id') id: string) {
     return this.service.findOne(id);
   }
-
+  @Delete(':id')
+  @ApiOperation({ summary: 'Delete Player By Id' })
+  deletePlayer(@Param('id') id: string) {
+    return this.service.deletePlayer(id);
+  }
   @Get(':id/tournament')
   @ApiOperation({ summary: 'Get player by id' })
   findTournamentPlayers(@Param('id') id: string) {

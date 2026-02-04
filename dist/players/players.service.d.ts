@@ -17,4 +17,5 @@ export declare class PlayersService {
     findByTournament(id: string): Promise<any[]>;
     findOne(id: string): Promise<any>;
     updateRecord(id: string, wins: number, losses: number): Promise<any>;
+    deletePlayer(id: string): Promise<void>;
 }

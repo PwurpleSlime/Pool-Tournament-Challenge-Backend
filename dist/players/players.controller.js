@@ -30,6 +30,9 @@ let PlayersController = class PlayersController {
     findOne(id) {
         return this.service.findOne(id);
     }
+    deletePlayer(id) {
+        return this.service.deletePlayer(id);
+    }
     findTournamentPlayers(id) {
         return this.service.findByTournament(id);
     }
@@ -76,6 +79,14 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], PlayersController.prototype, "findOne", null);
+__decorate([
+    (0, common_1.Delete)(':id'),
+    (0, swagger_1.ApiOperation)({ summary: 'Delete Player By Id' }),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], PlayersController.prototype, "deletePlayer", null);
 __decorate([
     (0, common_1.Get)(':id/tournament'),
     (0, swagger_1.ApiOperation)({ summary: 'Get player by id' }),
