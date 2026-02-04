@@ -16,6 +16,6 @@ export declare class PlayersService {
     findAll(): Promise<any[]>;
     findByTournament(id: string): Promise<any[]>;
     findOne(id: string): Promise<any>;
-    updateRecord(id: string, wins: number, losses: number): Promise<any>;
+    updateRecord(id: string, wins: number, losses: number, newName: string): Promise<any>;
     deletePlayer(id: string): Promise<void>;
 }

@@ -10,5 +10,6 @@ export declare class PlayersController {
     updateRecord(id: string, body: {
         wins: number;
         losses: number;
+        newName: string;
     }): Promise<any>;
 }

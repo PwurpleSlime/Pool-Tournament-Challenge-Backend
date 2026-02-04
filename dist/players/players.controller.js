@@ -37,7 +37,7 @@ let PlayersController = class PlayersController {
         return this.service.findByTournament(id);
     }
     updateRecord(id, body) {
-        return this.service.updateRecord(id, body.wins, body.losses);
+        return this.service.updateRecord(id, body.wins, body.losses, body.newName);
     }
 };
 exports.PlayersController = PlayersController;

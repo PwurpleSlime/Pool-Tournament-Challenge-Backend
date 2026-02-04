@@ -68,10 +68,11 @@ let PlayersService = class PlayersService {
         }
         return data;
     }
-    async updateRecord(id, wins, losses) {
+    async updateRecord(id, wins, losses, newName) {
         const { data, error } = await this.supabase
             .from('Player')
             .update({
+            disName: newName,
             wins: wins,
             losses: losses,
             "w-l": (wins + losses) === 0 ? '0%' : `${Math.round((wins / (wins + losses)) * 100)}%`

@@ -61,8 +61,8 @@ export class PlayersController {
   })
   updateRecord(
     @Param('id') id: string,
-    @Body() body: { wins: number; losses: number },
+    @Body() body: { wins: number; losses: number, newName: string },
   ) {
-    return this.service.updateRecord(id, body.wins, body.losses);
+    return this.service.updateRecord(id, body.wins, body.losses, body.newName);
   }
 }
