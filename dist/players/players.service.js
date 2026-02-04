@@ -32,7 +32,7 @@ let PlayersService = class PlayersService {
             wins: 0,
             losses: 0,
             "w-l": "0%",
-            logo: inputData.logo
+            logo: "https://example.com/logo.png"
         })
             .select('*')
             .single();
