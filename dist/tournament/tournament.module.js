@@ -10,11 +10,13 @@ exports.TournamentModule = void 0;
 const common_1 = require("@nestjs/common");
 const tournament_service_1 = require("./tournament.service");
 const tournament_controller_1 = require("./tournament.controller");
+const supabase_module_1 = require("../supabase/supabase.module");
 let TournamentModule = class TournamentModule {
 };
 exports.TournamentModule = TournamentModule;
 exports.TournamentModule = TournamentModule = __decorate([
     (0, common_1.Module)({
+        imports: [supabase_module_1.SupabaseModule],
         controllers: [tournament_controller_1.TournamentController],
         providers: [tournament_service_1.TournamentService],
     })

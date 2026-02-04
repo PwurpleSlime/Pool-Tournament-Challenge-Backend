@@ -1,4 +1,5 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { v4 as uuid } from 'uuid';
 
 export interface Match {
@@ -12,36 +13,79 @@ export interface Match {
 
 @Injectable()
 export class MatchesService {
+  constructor (
+    @Inject('SUPABASE_CLIENT')
+    private readonly supabase: SupabaseClient
+  ) {}
   private matches: Match[] = [];
 
-  create(data: Omit<Match, 'id' | 'playerWin'>): Match {
-    const match: Match = {
-      id: uuid(),
-      playerWin: null,
-      ...data,
-    };
+  async create(inputData: Omit<Match, 'id' | 'playerWin'>) {
+    const newMatchUUID = uuid()
+    const { data, error } = await this.supabase
+      .from('Match')
+      .insert({
+        id: newMatchUUID,
+        playerWin: null,
+        timeStart: inputData.timeStart,
+        timeEnd: inputData.timeEnd,
+        roundNum: inputData.roundNum,
+      })
+      .select('*')
+      .single()
+      if(error) {
+        throw new InternalServerErrorException(error.message)
+      }
+    for (let i = 0; i < inputData.playerIds.length; i++) {
+      const { data, error } = await this.supabase
+        .from('Match_Player')
+        .insert({
+          id: uuid(),
+          playerId: inputData.playerIds[i],
+          matchId: newMatchUUID
+        })   
+        .select('*')
+        .single()
+        if (error){
+          throw new InternalServerErrorException(error.message)
+        }
+    }
 
-    this.matches.push(match);
-    return match;
+    return data
   }
 
-  findAll(): Match[] {
-    return this.matches;
+  async findAll() {
+    const { data, error } = await this.supabase
+      .from('Match')
+      .select('*')
+    if (error) {
+      throw new InternalServerErrorException(error.message)
+    }
+
+    return data;
   }
 
+  async findMatchPlayer(id: string) {
+    const { data, error } = await this.supabase
+      .from('Match_Player')
+      .select('*')
+      .eq('matchId', id)
+      if (error) {
+        throw new InternalServerErrorException(error.message)
+      }
+      return data
+  }
+  findOne(id: string): Match {
+  const match = this.matches.find(m => m.id === id);
+  if (!match) {
+      throw new NotFoundException('Match not found');
+  }
+  return match;
+  }
 
-    findOne(id: string): Match {
-    const match = this.matches.find(m => m.id === id);
-    if (!match) {
-        throw new NotFoundException('Match not found');
-    }
-    return match;
-    }
-
-    setWinner(matchId: string, playerId: string): Match {
-    const match = this.findOne(matchId);
-    match.playerWin = playerId;
-    return match;
-    }
+  setWinner(matchId: string, playerId: string): Match {
+  const match = this.findOne(matchId);
+  match.playerWin = playerId;
+  return match;
+  }
 
 }

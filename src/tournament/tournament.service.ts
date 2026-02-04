@@ -1,4 +1,5 @@
-import { Injectable, ForbiddenException, NotFoundException } from '@nestjs/common';
+import { Injectable, ForbiddenException, NotFoundException, Inject, InternalServerErrorException } from '@nestjs/common';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { v4 as uuid } from 'uuid';
 
 export interface Tournament {
@@ -12,32 +13,58 @@ export interface Tournament {
 
 @Injectable()
 export class TournamentService {
+  constructor (
+    @Inject('SUPABASE_CLIENT')
+    private readonly supabase: SupabaseClient
+  ) {}
   private tournaments: Tournament[] = [];
 
-  create(data: Omit<Tournament, 'id'>): Tournament {
-    const tournament: Tournament = {
-      id: uuid(),
-      ...data,
-    };
-
-    this.tournaments.push(tournament);
-    return tournament;
+  async create(inputData: Omit<Tournament, 'id'>) {
+    const { data, error } = await this.supabase
+      .from('Tournament') 
+      .insert({
+        id: uuid(),
+        dateStart: inputData.dateStart,
+        dateEnd: inputData.dateEnd,
+        location: inputData.location,
+        lengthOfBreak: inputData.lengthOfBreak,
+        numberOfRounds: inputData.numberOfRounds
+      })
+      .select('*')
+      .single()
+    if (error) {
+      throw new InternalServerErrorException(error.message)
+    }
+    return data;
   }
 
-  findAll(): Tournament[] {
-    return this.tournaments;
+  async findAll() {
+    const { data, error } = await this.supabase
+    .from('Tournament')
+    .select('*')
+    if (error) {
+      throw new InternalServerErrorException(error.message)
+    }
+
+    return data
   }
 
 
-    findOne(id: string): Tournament {
-    const tournament = this.tournaments.find(t => t.id === id);
-    if (!tournament) {
-        throw new NotFoundException('Tournament not found');
-    }
-    return tournament;
-    }
+  async findOne(id: string) {
+  const { data, error } = await this.supabase
+  .from('Tournament')
+  .select('*')
+  .eq('id', id)
+  .single()
+
+  if (error) {
+    throw new InternalServerErrorException(error.message)
+  }
+  return data
+  }
 
 
+  // Why are you there then, @SPARE_TIME
   update(): never {
     throw new ForbiddenException('Tournament data is immutable once created');
   }

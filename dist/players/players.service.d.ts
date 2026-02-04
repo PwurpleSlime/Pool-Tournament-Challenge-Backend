@@ -1,3 +1,4 @@
+import { SupabaseClient } from '@supabase/supabase-js';
 export interface Player {
     id: string;
     tournamentId: string;
@@ -8,9 +9,12 @@ export interface Player {
     logo: string;
 }
 export declare class PlayersService {
+    private readonly supabase;
+    constructor(supabase: SupabaseClient);
     private players;
-    create(data: Omit<Player, 'id' | 'wins' | 'losses' | 'w_l'>): Player;
-    findAll(): Player[];
-    findOne(id: string): Player;
-    updateRecord(id: string, wins: number, losses: number): Player;
+    create(inputData: Omit<Player, 'id' | 'wins' | 'losses' | 'w_l'>): Promise<any>;
+    findAll(): Promise<any[]>;
+    findByTournament(id: string): Promise<any[]>;
+    findOne(id: string): Promise<any>;
+    updateRecord(id: string, wins: number, losses: number): Promise<any>;
 }

@@ -10,11 +10,13 @@ exports.PlayersModule = void 0;
 const common_1 = require("@nestjs/common");
 const players_service_1 = require("./players.service");
 const players_controller_1 = require("./players.controller");
+const supabase_module_1 = require("../supabase/supabase.module");
 let PlayersModule = class PlayersModule {
 };
 exports.PlayersModule = PlayersModule;
 exports.PlayersModule = PlayersModule = __decorate([
     (0, common_1.Module)({
+        imports: [supabase_module_1.SupabaseModule],
         controllers: [players_controller_1.PlayersController],
         providers: [players_service_1.PlayersService],
     })

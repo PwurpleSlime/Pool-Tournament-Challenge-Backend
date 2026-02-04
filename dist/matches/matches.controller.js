@@ -30,6 +30,9 @@ let MatchesController = class MatchesController {
     findOne(id) {
         return this.service.findOne(id);
     }
+    findMatchPlayer(id) {
+        return this.service.findMatchPlayer(id);
+    }
     setWinner(id, body) {
         return this.service.setWinner(id, body.playerWin);
     }
@@ -75,6 +78,14 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], MatchesController.prototype, "findOne", null);
 __decorate([
+    (0, common_1.Get)('/:id/player'),
+    (0, swagger_1.ApiOperation)({ summary: 'Get match_player by match id' }),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], MatchesController.prototype, "findMatchPlayer", null);
+__decorate([
     (0, common_1.Patch)(':id/winner'),
     (0, swagger_1.ApiOperation)({ summary: 'Set match winner (only mutable field)' }),
     (0, swagger_1.ApiBody)({
@@ -94,7 +105,7 @@ __decorate([
 ], MatchesController.prototype, "setWinner", null);
 exports.MatchesController = MatchesController = __decorate([
     (0, swagger_1.ApiTags)('matches'),
-    (0, common_1.Controller)('matches'),
+    (0, common_1.Controller)(['match', 'matches']),
     __metadata("design:paramtypes", [matches_service_1.MatchesService])
 ], MatchesController);
 //# sourceMappingURL=matches.controller.js.map

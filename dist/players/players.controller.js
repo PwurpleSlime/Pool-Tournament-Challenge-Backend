@@ -30,6 +30,9 @@ let PlayersController = class PlayersController {
     findOne(id) {
         return this.service.findOne(id);
     }
+    findTournamentPlayers(id) {
+        return this.service.findByTournament(id);
+    }
     updateRecord(id, body) {
         return this.service.updateRecord(id, body.wins, body.losses);
     }
@@ -74,6 +77,14 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], PlayersController.prototype, "findOne", null);
 __decorate([
+    (0, common_1.Get)(':id/tournament'),
+    (0, swagger_1.ApiOperation)({ summary: 'Get player by id' }),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], PlayersController.prototype, "findTournamentPlayers", null);
+__decorate([
     (0, common_1.Patch)(':id/record'),
     (0, swagger_1.ApiOperation)({ summary: 'Update wins/losses only' }),
     (0, swagger_1.ApiBody)({
@@ -94,7 +105,7 @@ __decorate([
 ], PlayersController.prototype, "updateRecord", null);
 exports.PlayersController = PlayersController = __decorate([
     (0, swagger_1.ApiTags)('players'),
-    (0, common_1.Controller)('players'),
+    (0, common_1.Controller)(['player', 'players']),
     __metadata("design:paramtypes", [players_service_1.PlayersService])
 ], PlayersController);
 //# sourceMappingURL=players.controller.js.map

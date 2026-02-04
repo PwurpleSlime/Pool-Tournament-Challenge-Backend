@@ -1,6 +1,6 @@
-import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
+import { Injectable, BadRequestException, NotFoundException, InternalServerErrorException, Inject } from '@nestjs/common';
 import { v4 as uuid } from 'uuid';
-
+import { SupabaseClient } from '@supabase/supabase-js';
 export interface Player {
   id: string;
   tournamentId: string;
@@ -13,47 +13,81 @@ export interface Player {
 
 @Injectable()
 export class PlayersService {
+  constructor (
+    @Inject('SUPABASE_CLIENT')
+    private readonly supabase: SupabaseClient
+  ) {}
   private players: Player[] = [];
 
-  create(data: Omit<Player, 'id' | 'wins' | 'losses' | 'w_l'>): Player {
-    if (!data.logo.startsWith('http')) {
-      throw new BadRequestException('Logo must be an image URL');
-    }
 
-    const player: Player = {
-      id: uuid(),
-      wins: 0,
-      losses: 0,
-      w_l: '0%',
-      ...data,
-    };
+  async create(inputData: Omit<Player, 'id' | 'wins' | 'losses' | 'w_l'>) {
+    const { data, error } = await this.supabase 
+      .from('Player')
+      .insert({
+        id: uuid(),
+        disName: inputData.displayName,
+        tournamentId: inputData.tournamentId,
+        wins: 0,
+        losses: 0,
+        "w-l": "0%",
+        logo: inputData.logo
+      })
+      .select('*')
+      .single()
 
-    this.players.push(player);
-    return player;
+    return data
   }
 
-  findAll(): Player[] {
-    return this.players;
+  async findAll() {
+    const { data, error } = await this.supabase
+      .from('Player')
+      .select('*')
+    if (error) {
+      throw new InternalServerErrorException(error.message)
+    }
+    return data
+  }
+
+  async findByTournament(id: string) {
+    const { data, error } = await this.supabase
+      .from('Player')
+      .select('*')
+      .eq('tournamentId', id)
+    if (error) {
+      throw new InternalServerErrorException(error.message)
+    }
+    return data
+  }
+
+  async findOne(id: string) {
+    const { data, error } = await this.supabase
+      .from('Player')
+      .select('*')
+      .eq('id', id)
+      .single()
+    if (error) {
+      throw new InternalServerErrorException(error.message)
+    }
+    return data
+  }
+
+  async updateRecord(id: string, wins: number, losses: number) {
+    const { data, error } = await this.supabase
+      .from('Player')
+      .update({
+        wins: wins,
+        losses: losses,
+        "w-l": (wins + losses) === 0 ? '0%' : `${Math.round((wins / (wins + losses)) * 100)}%`
+      })
+      .eq('id', id)
+      .select('*')
+      .single()
+    if (error) {
+      throw new InternalServerErrorException(error.message)
+    }
+    return data
   }
 
 
-    findOne(id: string): Player {
-    const player = this.players.find(p => p.id === id);
-    if (!player) {
-        throw new NotFoundException('Player not found');
-    }
-    return player;
-    }
-
-    updateRecord(id: string, wins: number, losses: number): Player {
-    const player = this.findOne(id);
-
-    const total = wins + losses;
-    player.wins = wins;
-    player.losses = losses;
-    player.w_l = total === 0 ? '0%' : `${Math.round((wins / total) * 100)}%`;
-
-    return player;
-    }
-
+  // Add update/delete routes -- @SPARE_TIME
 }

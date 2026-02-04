@@ -3,7 +3,7 @@ import { ApiTags, ApiOperation, ApiBody } from '@nestjs/swagger';
 import { PlayersService } from './players.service';
 
 @ApiTags('players')
-@Controller('players')
+@Controller(['player','players'])
 export class PlayersController {
   constructor(private readonly service: PlayersService) {}
 
@@ -27,19 +27,22 @@ export class PlayersController {
   create(@Body() body) {
     return this.service.create(body);
   }
-
   @Get()
   @ApiOperation({ summary: 'Get all players' })
   findAll() {
     return this.service.findAll();
   }
-
   @Get(':id')
   @ApiOperation({ summary: 'Get player by id' })
   findOne(@Param('id') id: string) {
     return this.service.findOne(id);
   }
 
+  @Get(':id/tournament')
+  @ApiOperation({ summary: 'Get player by id' })
+  findTournamentPlayers(@Param('id') id: string) {
+    return this.service.findByTournament(id);
+  }
   @Patch(':id/record')
   @ApiOperation({ summary: 'Update wins/losses only' })
   @ApiBody({

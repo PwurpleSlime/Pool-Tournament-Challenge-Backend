@@ -1,3 +1,4 @@
+import { SupabaseClient } from '@supabase/supabase-js';
 export interface Tournament {
     id: string;
     dateStart: Date;
@@ -7,10 +8,12 @@ export interface Tournament {
     numberOfRounds: number;
 }
 export declare class TournamentService {
+    private readonly supabase;
+    constructor(supabase: SupabaseClient);
     private tournaments;
-    create(data: Omit<Tournament, 'id'>): Tournament;
-    findAll(): Tournament[];
-    findOne(id: string): Tournament;
+    create(inputData: Omit<Tournament, 'id'>): Promise<any>;
+    findAll(): Promise<any[]>;
+    findOne(id: string): Promise<any>;
     update(): never;
     remove(): never;
 }

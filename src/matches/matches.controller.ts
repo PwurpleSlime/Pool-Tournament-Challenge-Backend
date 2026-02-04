@@ -3,7 +3,7 @@ import { ApiTags, ApiOperation, ApiBody } from '@nestjs/swagger';
 import { MatchesService } from './matches.service';
 
 @ApiTags('matches')
-@Controller('matches')
+@Controller(['match','matches'])
 export class MatchesController {
   constructor(private readonly service: MatchesService) {}
 
@@ -40,7 +40,11 @@ export class MatchesController {
   findOne(@Param('id') id: string) {
     return this.service.findOne(id);
   }
-
+  @Get('/:id/player')
+  @ApiOperation({ summary: 'Get match_player by match id' })
+  findMatchPlayer(@Param('id') id: string) {
+    return this.service.findMatchPlayer(id);
+  }
   @Patch(':id/winner')
   @ApiOperation({ summary: 'Set match winner (only mutable field)' })
   @ApiBody({
