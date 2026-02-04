@@ -95,5 +95,7 @@ export class PlayersService {
     .from('Player')
     .delete()
     .eq('id', id)
+    .select('*')
+    .single()
   }
 }

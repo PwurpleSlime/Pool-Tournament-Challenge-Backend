@@ -88,7 +88,9 @@ let PlayersService = class PlayersService {
         const { data, error } = await this.supabase
             .from('Player')
             .delete()
-            .eq('id', id);
+            .eq('id', id)
+            .select('*')
+            .single();
     }
 };
 exports.PlayersService = PlayersService;
