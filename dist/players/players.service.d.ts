@@ -12,7 +12,7 @@ export declare class PlayersService {
     private readonly supabase;
     constructor(supabase: SupabaseClient);
     private players;
-    create(inputData: Omit<Player, 'id' | 'wins' | 'losses' | 'w_l'>): Promise<any>;
+    create(inputData: Omit<Player, 'id' | 'w_l'>): Promise<any>;
     findAll(): Promise<any[]>;
     findByTournament(id: string): Promise<any[]>;
     findOne(id: string): Promise<any>;

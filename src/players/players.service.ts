@@ -20,16 +20,16 @@ export class PlayersService {
   private players: Player[] = [];
 
 
-  async create(inputData: Omit<Player, 'id' | 'wins' | 'losses' | 'w_l'>) {
+  async create(inputData: Omit<Player, 'id' | 'w_l'>) {
     const { data, error } = await this.supabase 
       .from('Player')
       .insert({
         id: uuid(),
         disName: inputData.displayName,
         tournamentId: inputData.tournamentId,
-        wins: 0,
-        losses: 0,
-        "w-l": "0%",
+        wins: inputData.wins || 0,
+        losses: inputData.losses || 0,
+        "w-l": (inputData.wins + inputData.losses) === 0 ? '0%' : `${Math.round((inputData.wins / (inputData.wins + inputData.losses)) * 100)}%`,
         logo: "https://example.com/logo.png"
       })
       .select('*')
